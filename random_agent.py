@@ -39,8 +39,8 @@ class agent:
 		self.player = solid_state["players"][self.player_num-1]
 
 		
-		#actions = [0,1,2,3,4,5]
-		actions =[0,1,2,3,4,5]
+		#actions = [0,1,2,3,4]
+		actions =[0,1,2,3,4]
 		action = random.choice(actions)
 		
 		#I want to delay more than half of the times
