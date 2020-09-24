@@ -29,7 +29,7 @@ MOVE_DIC = {
 }
 class agent:
 	def __init__(self, player_num, env):
-		self.name = "smart tree bot"
+		self.name = "deep orange"
 		self.player_num = player_num
 		self.env = env
 		self.reservedMoves = []
@@ -64,6 +64,7 @@ class agent:
 			print(self.reservedMoves)
 			if (not self.reservedMoves):
 				print("I could not find an escape so I stand still")
+				#sys.exit()
 				action = (MOVE_DIC['none'])
 			else:
 				action = self.reservedMoves.pop()
@@ -134,7 +135,7 @@ def check_legal_child( p_child, already_visited_cells,board):
 	p_child is a tuple (x,y)
 	'''
 	(x, y) = p_child
-	if x < 0 or x >= len(board) or y < 0 or y >= len(board):
+	if x < 0 or x >= len(board) or y < 0 or y >= len(board[0]):
 		return False # if the child cell is out of range return false
 	elif board[x][y] != 5 and board[x][y] != 0:
 		return  False # if it is anything but a b or empty cell
@@ -149,7 +150,7 @@ def check_block_child( p_child,board):
 	p_child is a tuple (x,y)
 	'''
 	(x, y) = p_child
-	if x < 0 or x >= len(board) or y < 0 or y >= len(board):
+	if x < 0 or x >= len(board) or y < 0 or y >= len(board[0]):
 		return False # if the child cell is out of range return false
 	elif board[x][y] == 3:
 		return  True # if it is anything but a b or empty cell
@@ -160,8 +161,11 @@ def check_block_child( p_child,board):
 
 def find_path_to_safe_cell(self,starting_node, unsafe_cells, already_visited_cells, board):
 	answer = False
+	already_visited_cells.append(starting_node.position)
 	bfs_q = queue.Queue()
-	bfs_q.put(starting_node)
+	for ch in starting_node.generate_children():
+		if( check_legal_child(ch.position, already_visited_cells,board)):
+			bfs_q.put(ch)
 	safeNode = False
 	while(not bfs_q.empty()):
 		current_node = bfs_q.get()
@@ -172,11 +176,10 @@ def find_path_to_safe_cell(self,starting_node, unsafe_cells, already_visited_cel
 			for child in current_node.generate_children():
 				is_it_valid = check_legal_child(child.position, already_visited_cells,board)
 				already_visited_cells.append(child.position)
-				print(is_it_valid)
+				#print(is_it_valid)
 				if ( is_it_valid):
 					bfs_q.put(child)
 	if ( safeNode):
-		print(safeNode.position)
 		path_to_safe_cell = []
 		tempNode = safeNode
 		while(tempNode.parent_move):
@@ -190,7 +193,7 @@ def find_path_to_safe_cell(self,starting_node, unsafe_cells, already_visited_cel
 
 
 def find_path_next_to_block(self,starting_node, unsafe_cells, already_visited_cells, board):
-	print("looking at cell:",starting_node.position )
+	#print("looking at cell:",starting_node.position )
 	answer = False
 	bfs_q = queue.Queue()
 	bfs_q.put(starting_node)
@@ -207,7 +210,7 @@ def find_path_next_to_block(self,starting_node, unsafe_cells, already_visited_ce
 			print(is_it_valid)
 			if ( is_it_valid):
 				bfs_q.put(child)
-		print("bfs_q.qsize()",bfs_q.qsize())
+		#print("bfs_q.qsize()",bfs_q.qsize())
 
 	if ( goalNode):
 		path_to_safe_cell = []
@@ -219,13 +222,3 @@ def find_path_next_to_block(self,starting_node, unsafe_cells, already_visited_ce
 
 
 	return False #if queue gets empty it means there is no solution
-
-
-
-
-
-
-
-
-
-
