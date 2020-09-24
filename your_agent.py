@@ -4,6 +4,7 @@ This is your AGENT. It is technically random agent but this is yours
 '''
 import time
 import random
+import numpy as np
 
 class agent:
 	def __init__(self, player_num, env):
