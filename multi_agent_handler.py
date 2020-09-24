@@ -146,7 +146,7 @@ for i in range(num_episodes):
 		sleep(0.2)
 
 	
-		env.render(True) 
+	env.render(True) 
 	#env.convert_video() # it generates the video
 	if players[0].score > players[1].score:
 		print(f" Game over. {agent1.name} wins round{i+1}.")
